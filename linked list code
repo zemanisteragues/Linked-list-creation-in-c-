@@ -1,0 +1,145 @@
+// this is a program to inplement a linked list with the following operations: 
+//  insertion , insertion at front , deletion at any point , sorting and reversing
+
+///@author Vimanyu sharma aka zemanisteragues
+#include<iostream>
+using namespace std;
+
+#define endl "\n"
+
+struct node {
+    int x;
+    node *next;
+
+    node() {x=0, next = nullptr;}
+    node(int data) {x = data , next = nullptr;}
+};
+
+node *insertion(int data , node *head) {
+    if(head == nullptr) {
+        head = new node(data); 
+        return head;
+    }
+    else 
+        head->next = insertion(data,head->next);
+}
+
+void searching(int val , node *head) {
+    int i = 0;
+    for(node *tmp = head ; tmp != nullptr ; tmp = tmp->next, i++) {
+        if(tmp->x == val) {
+            cout << "Element found at position " << i << endl;
+            return; 
+        }
+    }
+
+    cout << "Element node found in the list" << endl;
+}
+void *sorting(node * &head) {
+    for(node *tmp = head ; tmp->next != nullptr ; tmp = tmp->next) {
+        for(node *tmp2 = tmp ; tmp2!=nullptr ; tmp2 = tmp2->next) {
+            if(tmp->x > tmp2->x) {
+                swap(tmp->x , tmp2->x);
+            }
+        }
+    }
+}
+
+void insertionAtLocation(node * &head , int data , int position) {
+    if(head == nullptr) {
+        cout << "Empty list!" << endl;
+        return ;
+    }
+    node *tmp = head;
+    int i{};
+    while(tmp!=nullptr) {
+        if(i == position) {
+            node *var = new node(data);
+            var->next = tmp->next;
+            tmp->next = var;
+        }
+        i++;
+        tmp = tmp->next;
+    }
+
+    cout << "Operation completed" << endl;
+    return ;
+}
+
+void reverseList(node * &head) {
+    node *tmp = head;
+    node *next{nullptr} , *prev{nullptr};
+
+    while(tmp!=nullptr) {
+        next = tmp->next;
+        tmp->next = prev;
+        prev = tmp ;
+        tmp = next;
+    }
+    head = prev;
+
+    return ;
+}
+
+void insertionAtHead(node * &prev , int data) {
+    node *tmp = new node(data);
+
+    tmp->next = prev->next;
+    prev->next = tmp;
+
+    swap(tmp->x , prev->x);
+
+    return ;
+}
+void display(node *head) {
+    for(node *tmp = head ; tmp != nullptr ; tmp = tmp->next) 
+        cout << tmp->x << " ";
+    cout << endl;
+    return ;
+}
+
+void deletionNode(node *&head , int val) {
+
+    if(head == nullptr) {
+        cout << "Empty List" << endl;
+        return ;
+    }
+    if(head->x == val) {
+        node *tmp = head->next;
+        delete(head);
+        head = tmp;
+    }
+    else {
+        node *prev = head;
+        for(node *tmp = head ; tmp != nullptr ; tmp = tmp->next) {
+            
+            if(tmp->x == val) {
+                node *var = new node();
+                var->next = tmp->next;
+                delete(tmp);
+                tmp = prev;
+                tmp->next = var->next;
+                return ;
+            }
+            prev = tmp;
+        }
+
+        return ;
+    }
+}
+
+int main() {
+    node *head = nullptr;
+    int len{};
+    cin >> len ;
+    for(int i = 0 ; i <= len ; i++) {
+        head = insertion(i , head);
+    }
+    display(head);
+    deletionNode(head , 1);
+    display(head);
+
+
+}
+
+
